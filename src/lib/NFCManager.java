@@ -8,7 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
 import android.nfc.NfcAdapter;
-import com.frutch.artogoadmin.R;
+
+/*!
+ * Android NFC wrapper
+ *
+ * Copyright 2016 Wesley de Bruijn
+ * Released under the MIT license
+ * https://github.com/wesleydebruijn/android-nfc-wrapper/LICENSE.md
+ */
 
 public class NFCManager
 {
@@ -20,7 +27,8 @@ public class NFCManager
     private boolean writeMode;
     private boolean readMode;
 
-    public static final String MIME_TYPE = "artogo";
+    // change MIME_TYPE variable to your preference
+    public static final String MIME_TYPE = "nfcwrapper";
 
     public NFCManager(Context context) {
         this.adapter = NfcAdapter.getDefaultAdapter(context);
