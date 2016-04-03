@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mime_type">nfcwrapper</string>
+    <string name="dialog_title">Detecting NFC tag</string>
+    <string name="dialog_message">Hold a NFC tag near your device to link this data to it.</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="write_successful">NFC tag successfully configured!</string>
+    <string name="write_unsuccessful">Oops! Something went wrong with configuring the NFC tag..</string>
+</resources>
