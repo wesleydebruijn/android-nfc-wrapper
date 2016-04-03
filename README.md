@@ -13,8 +13,7 @@ A simple to use Android NFC wrapper to easily read and write NDEF data with your
 <uses-permission android:name="android.permission.NFC" />
 <uses-feature android:name="android.hardware.nfc" android:required="true" />
 ```
-### General
-Add the following code to the activity where you want to use the NFC read and/or write tasks.
+Add the following code to the activity where you want to use the NFC read and/or write tasks. For this example, the MainActivity is used.
 
 **Method: onCreate**
 ```
@@ -23,7 +22,7 @@ private NFCManager nfcManager;
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_layout);
+    setContentView(R.layout.activity_main);
 
     // Initialize NFC Manager
     nfcManager = new NFCManager(this);
@@ -75,3 +74,30 @@ public void onResume() {
 }
 ```
 ### Writing
+The following code can be used in the method where you want to open the write dialog.
+```
+NFCTag tag = new NFCTag("123", "article");
+nfcManager.openWriteDialog(this, tag, new NewWriteTask());
+```
+**Method: handleIntent**
+```
+private void handleIntent(Intent intent) {
+    if(nfcManager.isTagWritable(intent)) {
+        nfcManager.write(intent);
+    }
+}
+```
+**Inner class: NewWriteTask**
+
+Within this class you define the actions you are doing when the data is written on a NFC tag, for example: updating the UI.
+```
+private class NewWriteTask extends NFCWriteTask {
+    @Override
+    protected void onPostExecute(Boolean result) {
+        nfcManager.closeWriteDialog(MainActivity.this);
+        if(result) {
+            Toast.make(MainActivity.this, R.string.write_successful, Toast.LENGTH_LONG).show();
+        }
+    }
+}
+```
