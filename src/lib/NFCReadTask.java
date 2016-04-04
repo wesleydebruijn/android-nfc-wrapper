@@ -18,30 +18,32 @@ import java.io.UnsupportedEncodingException;
  * https://github.com/wesleydebruijn/android-nfc-wrapper/LICENSE.md
  */
 
-public class NFCReadTask extends AsyncTask<Intent, Void, NFCTag> {
+ public class NFCReadTask extends AsyncTask<Intent, Void, NFCTag> {
 
-    @Override
-    protected NFCTag doInBackground(Intent... params) {
-        Intent intent = params[0];
+     @Override
+     protected NFCTag doInBackground(Intent... params) {
+         Intent intent = params[0];
 
-        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        Ndef ndef = Ndef.get(tag);
+         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+         Ndef ndef = Ndef.get(tag);
 
-        if (ndef == null) {
-            return null;
-        }
+         if (ndef == null) {
+             return null;
+         }
 
-        NdefMessage ndefMessage = ndef.getCachedNdefMessage();
+         NdefMessage ndefMessage = ndef.getCachedNdefMessage();
 
-        NdefRecord[] records = ndefMessage.getRecords();
-        for (NdefRecord ndefRecord : records) {
-            try {
-                return new NFCTag(ndefRecord).decode();
-            } catch (UnsupportedEncodingException e) {
-                Log.e("NFC", "Unsupported Encoding", e);
-            }
-        }
+         if(ndefMessage != null) {
+             NdefRecord[] records = ndefMessage.getRecords();
+             for (NdefRecord ndefRecord : records) {
+                 try {
+                     return new NFCTag(ndefRecord).decode();
+                 } catch (UnsupportedEncodingException e) {
+                     Log.e("NFC", "Unsupported Encoding", e);
+                 }
+             }
+         }
 
-        return null;
-    }
-}
+         return null;
+     }
+ }

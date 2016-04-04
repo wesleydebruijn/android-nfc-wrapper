@@ -1,11 +1,11 @@
-# android-nfc-wrapper
+# Android NFC wrapper
 A simple to use Android NFC wrapper to easily read and write NDEF data with your Android device.
 
 ## Setup
-- Create a new package in your Android project to store the library _(source code can be found in: src/lib)_
-- Put the value xml file (nfc.xml) in the res/values folder of your Android project
-- Make sure the references in the NFC library are correct _(so you are able use the R.string.value)_
-- Change the MIME TYPE in src/lib/NFCManager.java and res/values/nfc.xml to your own preference
+- Create a new package in your Android project to store the library _(source code located at: src/lib)_
+- Place the value xml file (nfc.xml) in the res/values folder of your Android project
+- Make sure the references in the NFC library are correct to be able to use the resource (R) object
+- Change the MIME TYPE in src/lib/NFCManager.java and in res/values/nfc.xml to your own preference
 
 ## Usage
 **AndroidManifest.xml**
@@ -37,25 +37,18 @@ protected void onCreate(Bundle savedInstanceState) {
         handleIntent(intent);
     }
 ```
-**Method: onNewIntent**
+**Method: handleIntent**
 ```
 private void handleIntent(Intent intent) {
-  if(nfcManager.isTagReadable(intent)) {
-    nfcManager.read(intent, new NewReadTask());
-  }
-}
-```
-**Inner class: NewReadTask**
-
-Within this class you define the actions you are doing when you receive the data from the read task, for example: updating the UI.
-```
-private class NewReadTask extends NFCReadTask {
-    @Override
-    protected void onPostExecute(NFCTag tag) {
-        if (tag != null) {
-            setTitle(tag.data);
+  if(nfcManager.isTagReadable(intent))
+  {
+    nfcManager.read(i, new NFCReadTask() {
+        @Override
+        protected void onPostExecute(NFCTag tag) {
+            // do stuff with NFCTag : tag
         }
-    }
+    });
+  }
 }
 ```
 **Method: onPause**
@@ -77,27 +70,20 @@ public void onResume() {
 The following code can be used in the method where you want to open the write dialog.
 ```
 NFCTag tag = new NFCTag("123", "article");
-nfcManager.openWriteDialog(this, tag, new NewWriteTask());
+nfcManager.openWriteDialog(this, tag);
 ```
 **Method: handleIntent**
 ```
 private void handleIntent(Intent intent) {
-    if(nfcManager.isTagWritable(intent)) {
-        nfcManager.write(intent);
-    }
-}
-```
-**Inner class: NewWriteTask**
-
-Within this class you define the actions you are doing when the data is written on a NFC tag, for example: updating the UI.
-```
-private class NewWriteTask extends NFCWriteTask {
-    @Override
-    protected void onPostExecute(Boolean result) {
-        nfcManager.closeWriteDialog(MainActivity.this);
-        if(result) {
-            Toast.make(MainActivity.this, R.string.write_successful, Toast.LENGTH_LONG).show();
-        }
+    if(nfcManager.isTagWritable(intent))
+    {
+        nfcManager.write(i, new NFCWriteTask() {
+            @Override
+            protected void onPostExecute(Boolean result) {
+                nfcManager.closeWriteDialog(MainActivity.this);
+                // do stuff with boolean : result
+            }
+        });
     }
 }
 ```
