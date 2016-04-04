@@ -77,7 +77,7 @@ public void onResume() {
 ### Writing
 The following code can be used in the method where you want to open the write dialog.
 ```
-NFCTag tag = new NFCTag("123", "article");
+NFCTag tag = new NFCTag("stringValue", "item");
 nfcManager.openWriteDialog(this, tag);
 ```
 **Method: handleIntent**
