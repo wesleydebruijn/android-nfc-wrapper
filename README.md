@@ -1,5 +1,13 @@
+<p align="center">
+	<img src="https://raw.githubusercontent.com/wesleydebruijn/android-nfc-wrapper/master/nfcwrapper.png" />
+</p>
 # Android NFC wrapper
-A simple to use Android NFC wrapper to easily read and write NDEF data with your Android device.
+A simple to use Android NFC wrapper to easily read and write NDEF data with your Android app.
+
+The structure of an NDEF message is as follows:
+
+<img src="https://raw.githubusercontent.com/wesleydebruijn/android-nfc-wrapper/master/ndefmessage.png" />
+
 
 ## Setup
 - Create a new package in your Android project to store the library _(source code located at: src/lib)_
@@ -32,17 +40,17 @@ protected void onCreate(Bundle savedInstanceState) {
 ### Reading
 **Method: onNewIntent**
 ```
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
+@Override
+protected void onNewIntent(Intent intent) {
+    handleIntent(intent);
+}
 ```
 **Method: handleIntent**
 ```
 private void handleIntent(Intent intent) {
   if(nfcManager.isTagReadable(intent))
   {
-    nfcManager.read(i, new NFCReadTask() {
+    nfcManager.read(intent, new NFCReadTask() {
         @Override
         protected void onPostExecute(NFCTag tag) {
             // do stuff with NFCTag : tag
@@ -77,7 +85,7 @@ nfcManager.openWriteDialog(this, tag);
 private void handleIntent(Intent intent) {
     if(nfcManager.isTagWritable(intent))
     {
-        nfcManager.write(i, new NFCWriteTask() {
+        nfcManager.write(intent, new NFCWriteTask() {
             @Override
             protected void onPostExecute(Boolean result) {
                 nfcManager.closeWriteDialog(MainActivity.this);
